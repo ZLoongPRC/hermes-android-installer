@@ -55,7 +55,14 @@ source "$VENV_DIR/bin/activate"
 # 4. 安装 Hermes
 info "[4/6] 安装 Hermes Agent..."
 pip install --quiet --upgrade pip
-pip install hermes-agent 2>&1 | tail -1
+
+# 由于部分 C 扩展（jiter, pydantic-core）在 Android 上无法编译，
+# 使用 --no-deps 跳过依赖，再手动安装纯 Python 包
+pip install hermes-agent --no-deps --quiet 2>&1
+
+# 手动安装纯 Python 依赖
+pip install --quiet httpx rich markdown-it-py pygments prompt-toolkit \
+  pyyaml python-dotenv tqdm distro tabulate termcolor 2>&1 | tail -1
 
 # 复制 psutil（如果装了）
 if [ -d /data/data/com.termux/files/usr/lib/python3.13/site-packages/psutil ]; then
