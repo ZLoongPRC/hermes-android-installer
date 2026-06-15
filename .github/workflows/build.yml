@@ -31,8 +31,10 @@ jobs:
           cd termux-app
           ./gradlew assembleDebug
           cd ..
-          # 只保留 APK
-          cp termux-app/app/build/outputs/apk/debug/*.apk termux.apk
+          # 查找 APK 文件
+          APK=$(find termux-app -name "*.apk" | head -1)
+          echo "Found APK: $APK"
+          cp "$APK" termux.apk
           ls -lh termux.apk
 
       # ── Create installer bundle ───────────────
@@ -41,8 +43,8 @@ jobs:
           mkdir -p dist
           # APK
           mv termux.apk "dist/Termux-${{ matrix.arch }}.apk"
-          # Setup script（注入架构信息）
-          sed "s/ARCH_PLACEHOLDER/${{ matrix.arch }}/g" scripts/setup.sh > dist/setup.sh
+          # Setup script
+          cp ../scripts/setup.sh dist/setup.sh
           chmod +x dist/setup.sh
           # 压缩为单文件
           cd dist
