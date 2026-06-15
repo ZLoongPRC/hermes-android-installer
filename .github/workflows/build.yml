@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        arch: [aarch64, arm, x86_64]
+        arch: [aarch64]
 
     steps:
       - uses: actions/checkout@v4
@@ -55,23 +55,4 @@ jobs:
         with:
           name: Hermes-Android-${{ matrix.arch }}
           path: Hermes-Android-${{ matrix.arch }}.tar.gz
-          retention-days: 30
-
-      # ── Release ───────────────────────────────
-      - name: Release
-        if: github.ref == 'refs/heads/master'
-        uses: softprops/action-gh-release@v2
-        with:
-          tag_name: v0.1.${{ github.run_number }}
-          name: "Hermes Android v0.1.${{ github.run_number }} (${{ matrix.arch }})"
-          body: |
-            ## Hermes Android Installer v0.1.${{ github.run_number }}
-
-            - 架构: ${{ matrix.arch }}
-            - Termux APK + 一键安装脚本
-
-            ### 安装方法
-            1. 装 APK → 2. 打开 Termux → 3. 运行 `bash setup.sh`
-          files: Hermes-Android-${{ matrix.arch }}.tar.gz
-          generate_release_notes: false
-          make_latest: false
+          retention-days: 90
