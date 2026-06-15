@@ -44,7 +44,7 @@ jobs:
           # APK
           mv termux.apk "dist/Termux-${{ matrix.arch }}.apk"
           # Setup script
-          cp ../scripts/setup.sh dist/setup.sh
+          cp ../scripts/setup.sh dist/setup.sh || cp scripts/setup.sh dist/setup.sh
           chmod +x dist/setup.sh
           # 压缩为单文件
           cd dist
